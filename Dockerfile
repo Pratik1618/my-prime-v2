@@ -11,8 +11,10 @@ LABEL maintainer="kastrov"
 LABEL version="2.0.0"
 LABEL description="Amazon Prime Video Clone Application"
 
-# Remove default Tomcat applications
-RUN rm -rf /usr/local/tomcat/webapps/*
+# Remove default Tomcat applications and install curl for health check
+RUN rm -rf /usr/local/tomcat/webapps/* \
+    && apt-get update && apt-get install -y --no-install-recommends curl \
+    && rm -rf /var/lib/apt/lists/*
 
 # Copy WAR file from build stage
 COPY --from=build /app/target/amazon-prime-clone.war /usr/local/tomcat/webapps/ROOT.war
